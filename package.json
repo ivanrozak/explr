@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:generate": "prisma generate",
-    "db:reset": "prisma db reset",
-    "db:migrate": "prisma migrate dev"
+    "prisma:update": "npx prisma generate && npx prisma db push",
+    "prisma:clean": "npx prisma generate && npx prisma migrate reset && npx prisma db push",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.0",

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 
@@ -11,6 +12,10 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID as string,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -29,16 +34,20 @@ const handler = NextAuth({
           },
         });
 
+        if (!user) {
+          throw new Error("UserNotFound");
+        }
+
         const isCorrectPassword = await bcrypt.compare(
           credentials.password,
           user?.hashedPassword
         );
 
-        if (isCorrectPassword) {
-          return user;
+        if (!isCorrectPassword) {
+          throw new Error("IncorrectPassword");
         }
 
-        return null;
+        return user;
       },
     }),
   ],
@@ -57,6 +66,13 @@ const handler = NextAuth({
       }
       return token;
     },
+  },
+  pages: {
+    signIn: "/auth/signin",
+    // signOut: "/auth/signout",
+    error: "/auth/signin",
+    verifyRequest: "/auth/verify-request",
+    newUser: "/auth/new-user",
   },
 });
 
