@@ -68,11 +68,11 @@ const handler = NextAuth({
     },
   },
   pages: {
-    signIn: "/auth/signin",
-    // signOut: "/auth/signout",
-    error: "/auth/signin",
-    verifyRequest: "/auth/verify-request",
-    newUser: "/auth/new-user",
+    signIn: "/signin", // Displays signin buttons
+    // signOut: "/auth/signout", // Displays form with sign out button
+    // error: "/error", // Error code passed in query string as ?error
+    verifyRequest: "/verify-request", // Used for check email page
+    // newUser: "/new-user", // New users will be directed here on first sign in
   },
 });
 

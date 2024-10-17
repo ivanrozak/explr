@@ -5,7 +5,7 @@ const links = {
   askGuides: "/ask-guides",
   blog: "/blog",
   contactUs: "/contact-us",
-  login: "/login",
+  login: "/signin",
   signup: "/signup",
   dashboard: "/dashboard",
 };

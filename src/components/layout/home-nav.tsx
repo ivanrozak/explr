@@ -1,10 +1,10 @@
 "use client";
-// import UserActionButton from "@/components/commons/UserActionButton";
 import links, { linkArray, linkClassName } from "@/constants/links";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import UserActionButton from "./user-action-button";
 
 const HomeNav = () => {
   const [showNavbar, setShowNavbar] = React.useState(false);
@@ -53,7 +53,7 @@ const HomeNav = () => {
           </nav>
         </div>
         <nav className="ml-auto flex gap-6 items-center">
-          {/* <UserActionButton /> */}
+          <UserActionButton />
         </nav>
       </div>
     </header>

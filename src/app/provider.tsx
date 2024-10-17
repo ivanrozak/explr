@@ -1,12 +1,15 @@
 "use client";
+import NextAuthProvider from "@/components/provider/next-auth-provider";
 import { Toaster } from "@/components/ui/sonner";
 import React from "react";
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      {children}
-      <Toaster richColors position="bottom-center" closeButton />
+      <NextAuthProvider>
+        {children}
+        <Toaster richColors position="bottom-center" closeButton />
+      </NextAuthProvider>
     </>
   );
 };

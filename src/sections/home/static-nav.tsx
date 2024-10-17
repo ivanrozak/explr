@@ -1,3 +1,4 @@
+import UserActionButton from "@/components/layout/user-action-button";
 import links, { linkClassName } from "@/constants/links";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,7 +36,7 @@ const StaticNav = () => {
           <Link href={links.contactUs} className={linkClassName}>
             contact us
           </Link>
-          {/* <UserActionButton withoutLogin /> */}
+          <UserActionButton withoutLogin />
         </nav>
       </div>
     </header>

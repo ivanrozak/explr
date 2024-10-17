@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, DM_Serif_Display } from "next/font/google";
 import "./globals.scss";
 import { cn } from "@/lib/utils";
+import Provider from "./provider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,7 +36,7 @@ export default function RootLayout({
           "antialiased"
         )}
       >
-        {children}
+        <Provider>{children}</Provider>
       </body>
     </html>
   );
