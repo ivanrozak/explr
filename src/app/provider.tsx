@@ -8,7 +8,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     <>
       <NextAuthProvider>
         {children}
-        <Toaster richColors position="bottom-center" closeButton />
+        <Toaster position="bottom-center" closeButton />
       </NextAuthProvider>
     </>
   );
