@@ -2,7 +2,6 @@
 import BaseNav from "@/components/layout/base-nav";
 import Footer from "@/components/layout/footer";
 import HomeNav from "@/components/layout/home-nav";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
