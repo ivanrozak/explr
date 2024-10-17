@@ -15,6 +15,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import links from "@/constants/links";
 import { signOut, useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 const UserActionButton = ({
   withoutLogin = false,
@@ -22,6 +23,7 @@ const UserActionButton = ({
   withoutLogin?: boolean;
 }) => {
   const session = useSession();
+  const pathname = usePathname();
   if (session?.data?.user) {
     return (
       <DropdownMenu>
@@ -37,9 +39,11 @@ const UserActionButton = ({
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Link href={links.dashboard}>Dashboard</Link>
-          </DropdownMenuItem>
+          {!pathname.startsWith(links.dashboard) && (
+            <DropdownMenuItem asChild>
+              <Link href={links.dashboard}>Dashboard</Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem disabled>Settings</DropdownMenuItem>
           <DropdownMenuItem disabled>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
