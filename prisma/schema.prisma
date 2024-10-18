@@ -41,14 +41,20 @@ model Session {
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             String        @id @default(cuid())
   name           String?
-  email          String?   @unique
+  email          String?       @unique
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
   accounts       Account[]
   sessions       Session[]
+  role           UserRole      @default(USER)
+  Pin            Pin[]
+  boards         Board[]
+  likes          Like[]
+  itineraries    Itinerary[]
+  transaction    Transaction[]
 }
 
 model VerificationToken {
@@ -57,4 +63,228 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model AnonymousUser {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  boards     Board[]
+  likes      Like[]
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  GUIDE
+}
+
+model Pin {
+  id                Int        @id @default(autoincrement())
+  title             String
+  description       String?
+  image_url         String
+  link              String
+  place_name        String
+  address           String?
+  latitude          Float
+  longitude         Float
+  activity_duration Float? // Numeric value for duration (e.g., 1.5, 1)
+  duration_unit     String? // Unit of time (e.g., 'Day', 'Week')
+  pin_type          PinType    @default(ACTIVITY)
+  created_at        DateTime?  @default(now())
+  updated_at        DateTime?  @updatedAt
+  user_id           String
+  total_like        Int?       @default(0)
+  boards            BoardPin[]
+  likes             Like[]
+  tags              Tag[]
+  category          Category[]
+  user              User       @relation(fields: [user_id], references: [id])
+}
+
+enum PinType {
+  ACTIVITY
+  PLACE
+}
+
+model Category {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  image_url   String
+  type        CategoryType @default(THEME)
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @updatedAt
+  pins        Pin[]
+}
+
+enum CategoryType {
+  THEME
+  ACTIVITY
+}
+
+model Board {
+  id           Int            @id @default(autoincrement())
+  name         String
+  user_id      String?
+  user         User?          @relation(fields: [user_id], references: [id])
+  anonymous_id String?
+  anonymous    AnonymousUser? @relation(fields: [anonymous_id], references: [id])
+  original_id  Int?
+  original     Board?         @relation("DuplicateBoards", fields: [original_id], references: [id])
+  duplicates   Board[]        @relation("DuplicateBoards")
+  pins         BoardPin[]
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  Like         Like[]
+  Itinerary    Itinerary[]
+  transaction  Transaction?
+}
+
+model BoardPin {
+  id         Int      @id @default(autoincrement())
+  board      Board    @relation(fields: [board_id], references: [id])
+  board_id   Int
+  pin        Pin      @relation(fields: [pin_id], references: [id])
+  pin_id     Int
+  created_at DateTime @default(now())
+
+  @@unique([board_id, pin_id])
+  @@index([pin_id])
+}
+
+model Like {
+  id           Int            @id @default(autoincrement())
+  user_id      String?
+  user         User?          @relation(fields: [user_id], references: [id])
+  anonymous_id String?
+  anonymous    AnonymousUser? @relation(fields: [anonymous_id], references: [id])
+  pin_id       Int
+  pin          Pin            @relation(fields: [pin_id], references: [id])
+  board_id     Int
+  board        Board          @relation(fields: [board_id], references: [id])
+  created_at   DateTime       @default(now())
+
+  @@unique([user_id, pin_id, board_id])
+  @@unique([anonymous_id, pin_id, board_id])
+  @@index([pin_id])
+  @@index([board_id])
+}
+
+model Tag {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  pins       Pin[]
+  created_at DateTime @default(now())
+}
+
+model Itinerary {
+  id                     Int               @id @default(autoincrement())
+  name                   String
+  description            String?
+  cost_breakdown         CostBreakdown[]
+  itinerary_list         ItineraryDetail[]
+  total_recommended_time String?
+  total_cost             String?
+  price                  Float?
+  is_published           Boolean?          @default(false)
+  user_id                String
+  user                   User              @relation(fields: [user_id], references: [id])
+  board_id               Int
+  board                  Board             @relation(fields: [board_id], references: [id])
+  created_at             DateTime          @default(now())
+  updated_at             DateTime?         @updatedAt
+}
+
+model CostBreakdown {
+  id           Int       @id @default(autoincrement())
+  image_url    String?
+  name         String?
+  content      String?
+  order_id     Int?
+  itinerary_id Int
+  itinerary    Itinerary @relation(fields: [itinerary_id], references: [id])
+}
+
+model ImageReference {
+  id        Int                @id @default(autoincrement())
+  image_url String
+  type      ImageReferenceType @default(PUBLIC)
+}
+
+enum ImageReferenceType {
+  COSTBREAKDOWN
+  PUBLIC
+  INTERESTPOINT
+}
+
+model ItineraryDetail {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  description        String?
+  image_url          String?
+  order_id           Int?
+  activity_duration  Int?
+  duration_unit      String?
+  pin_type           String?
+  activity           String?
+  estimated_time     String?
+  estimated_distance String?
+  estimated_cost     String?
+  place_name         String?
+  address            String?
+  latitude           Float?
+  longitude          Float?
+  pin_id             Int?
+  tags               String[]
+  itinerary_id       Int
+  itinerary          Itinerary            @relation(fields: [itinerary_id], references: [id])
+  itineraryBreakdown ItineraryBreakdown[]
+  created_at         DateTime             @default(now())
+  updated_at         DateTime?            @updatedAt
+}
+
+model ItineraryBreakdown {
+  id                  Int             @id @default(autoincrement())
+  itinerary_detail_id Int
+  itinerary_detail    ItineraryDetail @relation(fields: [itinerary_detail_id], references: [id])
+  cost                Float
+  time                Int
+  created_at          DateTime        @default(now())
+  updated_at          DateTime?       @updatedAt
+}
+
+model Transaction {
+  id        String            @id @default(cuid())
+  amount    Float
+  status    TransactionStatus @default(PENDING)
+  user      User              @relation(fields: [user_id], references: [id])
+  user_id   String
+  board_id  Int?              @unique
+  board     Board?            @relation(fields: [board_id], references: [id])
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  payment   Payment?
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  stripe_payment_id String        @unique
+  status            PaymentStatus
+  transaction_id    String        @unique
+  transaction       Transaction   @relation(fields: [transaction_id], references: [id])
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime?     @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  CANCELED
 }
