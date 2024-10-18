@@ -34,7 +34,7 @@ import { toast } from "sonner";
 import { Pin, PinType } from "@prisma/client";
 import { formatDate } from "@/lib/helpers";
 import DialogInterestPoint from "@/components/dialog/dialog-interest-point";
-const qs = require("qs");
+import qs from "qs";
 
 const Page = () => {
   const [open, setOpen] = useState<boolean>(false);

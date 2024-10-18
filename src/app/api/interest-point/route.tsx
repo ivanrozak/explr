@@ -21,7 +21,7 @@ export const GET = async (req: NextRequest) => {
   const userId = (await getToken({ req }).then((token) => token?.sub)) || null;
 
   try {
-    let whereClause: Prisma.PinWhereInput = {};
+    const whereClause: Prisma.PinWhereInput = {};
 
     if (type && type !== "ALL") {
       whereClause.pin_type = type as PinType;
