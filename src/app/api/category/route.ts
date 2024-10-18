@@ -12,6 +12,25 @@ import { NextRequest } from "next/server";
 export const GET = async (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams;
   const type = searchParams.get("type");
+  const pinId = searchParams.get("pinId") as string | undefined;
+
+  if (pinId) {
+    const response = await prisma.category.findMany({
+      where: {
+        pins: {
+          some: {
+            id: parseInt(pinId),
+          },
+        },
+      },
+    });
+
+    if (response) {
+      return okResponse(response);
+    } else {
+      return notFoundResponse();
+    }
+  }
 
   let res = null;
 
