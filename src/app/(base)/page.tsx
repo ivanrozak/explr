@@ -15,7 +15,7 @@ const Page = () => {
       <div className="bg-ex_artboard">
         <StaticNav />
         <Heading />
-        <div className="container max-w-screen-2xl py-16">
+        <div className="container max-w-screen-2xl">
           <InterestPointGrids />
         </div>
       </div>
