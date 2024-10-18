@@ -30,11 +30,11 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
-// import DialogCategory from "@/components/pages/dashboard/categories/DialogCategory";
 import { toast } from "sonner";
 import { axiosInstance } from "@/lib/axios";
 import { formatDate } from "@/lib/helpers";
 import { Category } from "@prisma/client";
+import DialogCategory from "@/components/dialog/dialog-category";
 
 const CategoriesPage = () => {
   const [open, setOpen] = useState(false);
@@ -114,13 +114,13 @@ const CategoriesPage = () => {
                 Add New
               </span>
             </Button>
-            {/* <DialogCategory
+            <DialogCategory
               open={open}
               onOpenChange={setOpen}
               refetch={fetchData}
               currentData={currentData}
               setCurrentData={setCurrentData}
-            /> */}
+            />
           </div>
         </div>
         <Card x-chunk="dashboard-06-chunk-0" className="mt-4">

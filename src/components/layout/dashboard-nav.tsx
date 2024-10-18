@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import { Search } from "lucide-react";
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,7 +7,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Input } from "@/components/ui/input";
 import { usePathname } from "next/navigation";
 import UserActionButton from "./user-action-button";
 
@@ -52,15 +49,9 @@ const DashboardNav = () => {
           ))}
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="relative ml-auto flex-1 md:grow-0">
-        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search..."
-          className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
-        />
+      <div className="ml-auto grow-0 flex-1 inline-flex gap-2">
+        <UserActionButton />
       </div>
-      <UserActionButton />
     </header>
   );
 };
