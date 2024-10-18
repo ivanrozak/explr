@@ -34,7 +34,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { axiosInstance } from "@/lib/axios";
 import { formatDate } from "@/lib/helpers";
-import { Category } from "@/db/types/database";
+import { Category } from "@prisma/client";
 
 const CategoriesPage = () => {
   const [open, setOpen] = useState(false);
@@ -174,7 +174,7 @@ const CategoriesPage = () => {
                         <Badge variant="outline">{item.type.toString()}</Badge>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        {formatDate(item.createdAt.toString())}
+                        {formatDate(item?.createdAt?.toString() || "")}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         {item?.updatedAt

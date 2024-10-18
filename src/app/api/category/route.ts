@@ -77,7 +77,7 @@ export const PUT = async (req: NextRequest) => {
     image_url?: string;
   }
 
-  let values: CategoryValues = {
+  const values: CategoryValues = {
     name,
     type,
     updatedAt: new Date(),

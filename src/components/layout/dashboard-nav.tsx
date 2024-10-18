@@ -18,7 +18,7 @@ const DashboardNav = () => {
 
   const generateBreadcrumbs = () => {
     const paths = pathname.split("/").filter((path) => path);
-    let breadcrumbs = [];
+    const breadcrumbs = [];
     let href = "";
 
     breadcrumbs.push({ label: "Home", href: "/" });
