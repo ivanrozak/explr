@@ -29,7 +29,7 @@ export const GET = async (req: NextRequest) => {
     const response = await prisma.tag.findMany({
       where: {
         name: {
-          contains: query,
+          contains: query || "",
         },
       },
       orderBy: {
